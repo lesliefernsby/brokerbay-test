@@ -1,26 +1,54 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "./redux/hooks";
+import { fetchAllAction, deleteUserAction, sort } from "./redux/slices/user.slice";
 
-function App() {
+const App: React.FC = () => {
+  const data = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchAllAction());
+  }, [dispatch]);
+
+  function handleSort(sortBy: string) {
+    dispatch(sort(sortBy));
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {data.users && (
+        <>
+          <div>Fetched data</div>
+
+          <table>
+            <thead>
+              <tr>
+                <th onClick={() => handleSort("firstName")}>First Name</th>
+                <th onClick={() => handleSort("lastName")}>Last Name</th>
+                <th onClick={() => handleSort("email")}>Email Name</th>
+                <th onClick={() => handleSort("phone")}>Phone</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {data.users.map((user) => {
+                return (
+                  <tr key={user.id}>
+                    <td>{user.firstName}</td>
+                    <td>{user.lastName}</td>
+                    <td>{user.email}</td>
+                    <td>{user.phone}</td>
+                    <td><button onClick={() => dispatch(deleteUserAction(user.id))}>Delete</button></td>
+                    <td><button>Update</button></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </>
+      )}
+    </>
   );
-}
+};
 
 export default App;

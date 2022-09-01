@@ -40,4 +40,23 @@ async function updateUser(id, user) {
   return userToUpdate;
 }
 
-module.exports = { getAll, getById, updateUser };
+async function deleteUser(id) {
+  const userToDelete = await User.findOne({
+    where: {
+      id,
+    },
+    raw: false,
+  });
+
+  if (!userToDelete) return;
+
+  try {
+    await User.destroy({ where: { id } });
+  } catch (e) {
+    return e;
+  }
+
+  return id;
+}
+
+module.exports = { getAll, getById, updateUser, deleteUser };

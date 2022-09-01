@@ -74,6 +74,7 @@ export const userSlice = createSlice({
     deleteUser: (state, action: PayloadAction<number>) => {
       state.users?.splice(state.users?.findIndex(user => user.id === action.payload), 1);
     },
+    
   },
 });
 
@@ -104,3 +105,7 @@ export const deleteUserAction = (id: number) => async (dispatch: Dispatch) => {
     }
   );
 };
+
+export const updateUser = (user: TUser) => async (dispatch: Dispatch) => {
+  userService.updateUser(user);
+}

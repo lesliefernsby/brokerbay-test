@@ -1,4 +1,5 @@
 import axios from "axios";
+import { TUser } from "../slices/types";
 
 const API_URL = "http://localhost:3000";
 
@@ -13,6 +14,12 @@ class UserService {
     const response = await axios.delete(`${API_URL}/users/${id}`);
 
     return response.data;
+  }
+
+  async updateUser(user: TUser) {
+    const response = await axios.put(`${API_URL}/users/${user.id}`, {data: user});
+
+    return response;
   }
 
 

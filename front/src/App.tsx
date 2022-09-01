@@ -1,54 +1,18 @@
-import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "./redux/hooks";
-import { fetchAllAction, deleteUserAction, sort } from "./redux/slices/user.slice";
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+import Edit from './components/Edit';
+import Home from './components/Home'
 
 const App: React.FC = () => {
-  const data = useAppSelector((state) => state.user);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(fetchAllAction());
-  }, [dispatch]);
-
-  function handleSort(sortBy: string) {
-    dispatch(sort(sortBy));
-  }
-
+ 
   return (
     <>
-      {data.users && (
-        <>
-          <div>Fetched data</div>
-
-          <table>
-            <thead>
-              <tr>
-                <th onClick={() => handleSort("firstName")}>First Name</th>
-                <th onClick={() => handleSort("lastName")}>Last Name</th>
-                <th onClick={() => handleSort("email")}>Email Name</th>
-                <th onClick={() => handleSort("phone")}>Phone</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {data.users.map((user) => {
-                return (
-                  <tr key={user.id}>
-                    <td>{user.firstName}</td>
-                    <td>{user.lastName}</td>
-                    <td>{user.email}</td>
-                    <td>{user.phone}</td>
-                    <td><button onClick={() => dispatch(deleteUserAction(user.id))}>Delete</button></td>
-                    <td><button>Update</button></td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </>
-      )}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/edit/:id" element={<Edit />} />
+      </Routes>
     </>
-  );
+  )
 };
 
 export default App;

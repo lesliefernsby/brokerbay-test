@@ -1,0 +1,14 @@
+{
+  "development": {
+    "username": "ejwvhapx",
+    "password": "GK-KlJ6SRirMaw_BZ22D69Aw2nwB-pgO",
+    "database": "ejwvhapx",
+    "url": "postgres://ejwvhapx:GK-KlJ6SRirMaw_BZ22D69Aw2nwB-pgO@jelani.db.elephantsql.com/ejwvhapx",
+    "dialect": "postgres"
+  },
+  "test": {
+  
+  },
+  "production": {
+  }
+}

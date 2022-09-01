@@ -1,8 +1,6 @@
 export type TUser = {
-  id: number;
-  login: string;
+  id?: number;
   firstName: string;
-  middleName: string;
   lastName: string;
   email: string;
   phone: string;

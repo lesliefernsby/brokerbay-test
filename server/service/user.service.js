@@ -26,10 +26,7 @@ async function updateUser(id, user) {
   });
 
   if (!userToUpdate) return;
-  const { firstName, lastName, email, phone } = user;
-
-  console.log(userToUpdate);
-
+  const { firstName, lastName, email, phone } = user.data;
   if (firstName) userToUpdate.firstName = firstName;
   if (lastName) userToUpdate.lastName = lastName;
   if (email) userToUpdate.email = email;

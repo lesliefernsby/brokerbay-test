@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { fetchAllAction, updateUser } from "../redux/slices/user.slice";
+import { TUser } from "../redux/slices/types";
+import { fetchAllAction, updateUserAction } from "../redux/slices/user.slice";
 
 const Edit: React.FC = () => {
   const { id } = useParams();
@@ -9,7 +10,7 @@ const Edit: React.FC = () => {
 
   const data = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
-  const [input, setInput] = useState({
+  const [input, setInput] = useState<TUser>({
     firstName: "",
     lastName: "",
     email: "",
@@ -28,8 +29,9 @@ const Edit: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(updateUser(input));
-  }
+    dispatch(updateUserAction(input));
+    navigate("/");
+  };
 
   return (
     <>

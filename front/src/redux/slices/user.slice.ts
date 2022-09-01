@@ -7,7 +7,7 @@ import userService from "../service/user.service";
 // Define a type for the slice state
 interface UsersState {
   loading: boolean;
-  users: [TUser] | null ;
+  users: TUser[] | null | undefined ;
   error: TUserError | null;
   sortedDesc: boolean;
 }
@@ -74,11 +74,15 @@ export const userSlice = createSlice({
     deleteUser: (state, action: PayloadAction<number>) => {
       state.users?.splice(state.users?.findIndex(user => user.id === action.payload), 1);
     },
+
+    updateUser: (state, action: PayloadAction<TUser>) => {
+      state.users = state.users?.map(user => user.id === action.payload.id ? action.payload : user);
+    },
     
   },
 });
 
-export const { fetchRequest, fetchSuccess, fetchFailure, sort, deleteUser } =
+export const { fetchRequest, fetchSuccess, fetchFailure, sort, deleteUser, updateUser } =
   userSlice.actions;
 
 export const selectUser = (state: RootState) => state.user;
@@ -106,6 +110,12 @@ export const deleteUserAction = (id: number) => async (dispatch: Dispatch) => {
   );
 };
 
-export const updateUser = (user: TUser) => async (dispatch: Dispatch) => {
-  userService.updateUser(user);
+export const updateUserAction = (user: TUser) => async (dispatch: Dispatch) => {
+  userService.updateUser(user).then(
+    (data) => {
+      dispatch(updateUser(user));
+    },
+    (error) => {
+      dispatch(fetchFailure(error.response?.data));
+    });
 }

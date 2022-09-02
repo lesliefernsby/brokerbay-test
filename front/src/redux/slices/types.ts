@@ -5,10 +5,3 @@ export type TUser = {
   email: string;
   phone: string;
 };
-
-export type TUserError = {
-  detail: string;
-  status: number;
-  title: string;
-  type: string;
-};

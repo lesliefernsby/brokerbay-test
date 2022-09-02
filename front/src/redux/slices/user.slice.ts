@@ -1,14 +1,14 @@
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
-import { TUser, TUserError } from "./types";
+import { TUser } from "./types";
 import userService from "../service/user.service";
 
 // Define a type for the slice state
 interface UsersState {
   loading: boolean;
-  users: TUser[] | null | undefined ;
-  error: TUserError | null;
+  users: TUser[] | null | undefined;
+  error: string | null;
   sortedDesc: boolean;
 }
 
@@ -31,7 +31,7 @@ export const userSlice = createSlice({
       state.users = action.payload;
       state.error = null;
     },
-    fetchFailure: (state, action: PayloadAction<TUserError>) => {
+    fetchFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.users = null;
       state.error = action.payload;
@@ -72,50 +72,64 @@ export const userSlice = createSlice({
       }
     },
     deleteUser: (state, action: PayloadAction<number>) => {
-      state.users?.splice(state.users?.findIndex(user => user.id === action.payload), 1);
+      state.users?.splice(
+        state.users?.findIndex((user) => user.id === action.payload),
+        1
+      );
     },
 
     updateUser: (state, action: PayloadAction<TUser>) => {
-      state.users = state.users?.map(user => user.id === action.payload.id ? action.payload : user);
+      state.users = state.users?.map((user) =>
+        user.id === action.payload.id ? action.payload : user
+      );
     },
-    
   },
 });
 
-export const { fetchRequest, fetchSuccess, fetchFailure, sort, deleteUser, updateUser } =
-  userSlice.actions;
+export const {
+  fetchRequest,
+  fetchSuccess,
+  fetchFailure,
+  sort,
+  deleteUser,
+  updateUser,
+} = userSlice.actions;
 
 export const selectUser = (state: RootState) => state.user;
 
 export const fetchAllAction = () => async (dispatch: Dispatch) => {
   dispatch(fetchRequest());
-  userService.getAllUsers().then(
-    (data) => {
+  userService
+    .getAllUsers()
+    .then((data) => {
       dispatch(fetchSuccess(data));
-    },
-    (error) => {
-      dispatch(fetchFailure(error.response?.data));
-    }
-  );
+    })
+    .catch((error) => {
+      console.log(error);
+      dispatch(fetchFailure(error.message));
+    });
 };
 
 export const deleteUserAction = (id: number) => async (dispatch: Dispatch) => {
-  userService.deleteUser(id).then(
-    (data) => {
+  userService
+    .deleteUser(id)
+    .then((data) => {
       dispatch(deleteUser(id));
-    },
-    (error) => {
-      dispatch(fetchFailure(error.response?.data));
-    }
-  );
+    })
+    .catch((error) => {
+      console.log(error);
+      dispatch(fetchFailure(error.message));
+    });
 };
 
 export const updateUserAction = (user: TUser) => async (dispatch: Dispatch) => {
-  userService.updateUser(user).then(
-    (data) => {
+  userService
+    .updateUser(user)
+    .then((data) => {
       dispatch(updateUser(user));
-    },
-    (error) => {
-      dispatch(fetchFailure(error.response?.data));
+    })
+    .catch((error) => {
+      console.log(error);
+      dispatch(fetchFailure(error.message));
     });
-}
+};

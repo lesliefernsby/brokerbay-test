@@ -18,7 +18,8 @@ const Home: React.FC = () => {
 
   return (
     <>
-      {data.users && (
+      {data.loading && <div style={{fontSize: "3em"}}>Loading...</div>}
+      {data.users ? (
         <>
           <div>Fetched data</div>
 
@@ -48,6 +49,8 @@ const Home: React.FC = () => {
             </tbody>
           </table>
         </>
+      ) : (
+        <div>{data.error}</div>
       )}
     </>
   );

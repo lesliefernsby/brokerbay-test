@@ -1,7 +1,10 @@
 const { User } = require("../db/models");
+const { NotFoundError } = require("../helpers/errors/NotFoundError");
 
 async function getAll() {
   const users = await User.findAll({ raw: true });
+
+  if (!users) throw new NotFoundError('No users found', "NotFoundError");
   return users;
 }
 
@@ -12,7 +15,11 @@ async function getById(id) {
     },
     raw: true,
   });
-  if (!user) return;
+
+  if (!user) {
+    
+    throw new NotFoundError('User not found', "NotFoundError");
+  }
 
   return user;
 }
@@ -25,7 +32,7 @@ async function updateUser(id, user) {
     raw: false,
   });
 
-  if (!userToUpdate) return;
+  if (!userToUpdate) throw new NotFoundError('User not found', "NotFoundError");
   const { firstName, lastName, email, phone } = user.data;
   if (firstName) userToUpdate.firstName = firstName;
   if (lastName) userToUpdate.lastName = lastName;
@@ -45,13 +52,9 @@ async function deleteUser(id) {
     raw: false,
   });
 
-  if (!userToDelete) return;
+  if (!userToDelete) throw new NotFoundError('User not found', "NotFoundError");
 
-  try {
-    await User.destroy({ where: { id } });
-  } catch (e) {
-    return e;
-  }
+  await User.destroy({ where: { id } });
 
   return id;
 }

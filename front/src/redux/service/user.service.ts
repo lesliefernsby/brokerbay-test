@@ -5,23 +5,33 @@ const API_URL = "http://localhost:3000";
 
 class UserService {
   async getAllUsers() {
-    const response = await axios.get(`${API_URL}/users`);
-
-    return response.data;
+    try {
+      const response = await axios.get(`${API_URL}/users`);
+      return response.data;
+    } catch (e) {
+      throw e;
+    }
   }
 
   async deleteUser(id: number) {
-    const response = await axios.delete(`${API_URL}/users/${id}`);
-
-    return response.data;
+    try {
+      const response = await axios.delete(`${API_URL}/users/${id}`);
+      return response.data;
+    } catch (e) {
+      throw e;
+    }
   }
 
   async updateUser(user: TUser) {
-    const response = await axios.put(`${API_URL}/users/${user.id}`, {data: user});
+    try {
+      const response = await axios.put(`${API_URL}/users/${user.id}`, {
+        data: user,
+      });
 
-    return response;
+      return response;
+    } catch (e) {
+      throw e;
+    }
   }
-
-
 }
 export default new UserService();

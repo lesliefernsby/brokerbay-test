@@ -18,10 +18,14 @@ const Edit: React.FC = () => {
   });
 
   useEffect(() => {
+    if (!data) dispatch(fetchAllAction());
+  }, [data, dispatch])
+
+  useEffect(() => {
     const user = data.users?.find((user) => user.id === Number(id));
-    if (!user) dispatch(fetchAllAction());
-    if (user !== undefined) setInput(user);
-  }, [data, dispatch, id]);
+    if (!user) navigate('/'); else
+    setInput(user);
+  }, [data, dispatch, id, navigate]);
 
   const handleChange = (e: { target: HTMLInputElement }) => {
     setInput({ ...input, [e.target.name]: e.target.value });
